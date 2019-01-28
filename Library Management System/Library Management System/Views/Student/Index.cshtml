@@ -1,0 +1,100 @@
+﻿@*@model IEnumerable<Library_Management_System.Models.Student>*@
+
+@{
+//ViewData["Title"] = "Index";
+//Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>Index</h1>
+@model PagedList.IPagedList<Library_Management_System.Models.Student>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Students";
+}
+
+<h2>Students</h2>
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                @*@Html.ActionLink(@Html.DisplayNameFor(model => model.FirstName), "Index", new { sortOrder = ViewBag.NameSortParm })*@
+                @*@Html.DisplayNameFor(model => model.FirstName)*@
+
+            </th>
+            <th>
+                FirstName
+                @*@Html.DisplayNameFor(model => model.LastName)*@
+            </th>
+            <th>
+                @Html.ActionLink("Enrollment Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+                @*@Html.DisplayNameFor(model => model.Address)*@
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Faculty)*@
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.RollNo)*@
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Batch)*@
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Faculty)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RollNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Batch)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.StudentId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.StudentId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.StudentId">Delete</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+     @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
